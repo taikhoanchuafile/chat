@@ -3,6 +3,7 @@ import { env } from "../config/env";
 import http from "http";
 import { socketMiddleware } from "../middlewares/socketMiddleware";
 import Conversation from "../models/conversationModel";
+import { getConversationsHasMessage } from "../services/conversationService";
 
 /**
  *
@@ -30,7 +31,6 @@ export const initSocket = (server: http.Server) => {
     console.log("Đã kết nối socket server", socket.id);
     const userId = socket.data.user._id.toString();
 
-    console.log(userId);
     if (!userId) {
       console.error("Không có user trong socket data");
       return socket.disconnect();
@@ -44,6 +44,11 @@ export const initSocket = (server: http.Server) => {
     //user đăng nhặp nhiều máy sẽ có socketId tương ứng, cho hết vào danh sách value( Set() )
     onlineUsers.get(userId)?.add(socket.id);
 
+    // Join socketId vào toàn bộ room conversationId
+    const conversations = await getConversationsHasMessage(
+      socket.data.user._id
+    );
+    conversations.forEach((con) => socket.join(con._id.toString()));
     // Tạm bỏ qua cập nhật isOnline user db
 
     // Phát tin hiệu cho FE

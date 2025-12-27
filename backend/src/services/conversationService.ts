@@ -47,7 +47,7 @@ export const createConversationAndMessages = async (
 
   const populated = await conversation.populate({
     path: "participants",
-    select: "name avatar isOnline",
+    select: "name avatar",
   });
 
   return { conversation: populated, messages };
