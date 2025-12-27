@@ -1,7 +1,6 @@
 import { useUserService } from "@/services/userService";
 import type { userState } from "@/types/userType";
 import { create } from "zustand";
-import { useAuthStore } from "./authStore";
 
 export const useUserStore = create<userState>((set, get) => ({
   users: [],
