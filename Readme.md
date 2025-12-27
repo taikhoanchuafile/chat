@@ -72,14 +72,14 @@ Toàn bộ realtime của dự án hoạt động dựa trên Socket.IO.
 
 **1. User Online / Offline realtime**
 
-    **Backend**:
+**Backend**
 
 - Khi người dùng online, Socket.io lấy thông tin user từ middleware, tạo Socket ID tương ứng mỗi lần kết nối
 - Khởi tạo danh sách người dùng online
 - Kiểm tra user đã tồn tại trong danh sách này hay chưa, nếu chưa thì cho người dùng vào danh sách, lưu toàn bộ Socket ID vào danh sách tương ứng với user này
 - Phát tín hiệu xuống cho Socket FE
 
-  **Frontend**
+**Frontend**
 
 - Lắng nghe tín hiệu từ Socket BE xử lý hiển thị trạng thái online/offline
 
