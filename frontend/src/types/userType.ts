@@ -11,10 +11,10 @@ export interface User {
 
 export interface userState {
   users: User[] | [];
-  onlineUsers: string[] | [];
+  onlineUserIds: string[] | [];
 
   setUsers: (users: User[]) => void;
-  setOnlineUsers: (onlineUsers: string[]) => void;
-
+  setOnlineUserIds: (onlineUserIds: string[]) => void;
   getOtherUsers: () => Promise<void>;
+  addUser: (user: User) => void;
 }

@@ -27,6 +27,6 @@ export const findUserByNotUserId = async (currentUserId: Types.ObjectId) => {
   return await User.find({
     _id: { $ne: currentUserId },
   })
-    .sort({ isOnline: -1 })
+    .sort({ isOnline: 1 })
     .select("name email avatar");
 };

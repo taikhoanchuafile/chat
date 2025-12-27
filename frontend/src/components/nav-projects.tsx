@@ -17,7 +17,7 @@ export function NavProjects() {
   const users = useUserStore((state) => state.users);
   const currentUser = useAuthStore((state) => state.user);
 
-  const onlineUsers = useUserStore((state) => state.onlineUsers);
+  const onlineUserIds = useUserStore((state) => state.onlineUserIds);
   const conversations = useConversationStore((state) => state.conversations);
   const createConversation = useConversationStore(
     (state) => state.createConversation
@@ -58,7 +58,7 @@ export function NavProjects() {
                               <Circle
                                 className={cn(
                                   "w-3 h-3 drop-shadow-md absolute bottom-1 right-0",
-                                  [...onlineUsers].includes(u._id.toString())
+                                  [...onlineUserIds].includes(u._id.toString())
                                     ? "text-green-500 fill-green-500"
                                     : "text-red-500 fill-red-500"
                                 )}
@@ -68,7 +68,17 @@ export function NavProjects() {
                             <div className="text-xs">
                               <h2>{u.name}</h2>
                               <p className="text-neutral-500 opacity-80 line-clamp-1">
-                                {con.lastMessage.content}
+                                <span
+                                  className={cn(
+                                    [...onlineUserIds].includes(
+                                      u._id.toString()
+                                    )
+                                      ? "font-bold uppercase"
+                                      : ""
+                                  )}
+                                >
+                                  {con.lastMessage.content}
+                                </span>
                                 {" . "}
                                 {con.lastMessage.createdAt &&
                                   new Date(
@@ -94,17 +104,7 @@ export function NavProjects() {
           </SidebarGroupLabel>
           <SidebarMenu>
             {users.map((user) => (
-              <SidebarMenuItem
-                key={user._id}
-                className={
-                  cn(
-                    "cursor-pointer",
-                    [...onlineUsers].includes(user._id.toString())
-                  )
-                    ? "order-1"
-                    : "order-0"
-                }
-              >
+              <SidebarMenuItem key={user._id} className="cursor-pointer">
                 <SidebarMenuButton asChild>
                   <div onClick={() => handleClick(user)} className="space-x-1">
                     <div className="relative">
@@ -116,7 +116,7 @@ export function NavProjects() {
                       <Circle
                         className={cn(
                           "w-3 h-3 drop-shadow-md absolute -bottom-1 -right-1",
-                          [...onlineUsers].includes(user._id.toString())
+                          [...onlineUserIds].includes(user._id.toString())
                             ? "text-green-500 fill-green-500"
                             : "text-red-500 fill-red-500"
                         )}

@@ -1,12 +1,13 @@
 import { ExtendedError, Socket } from "socket.io";
 import { verifyAccessToken } from "../services/authService";
+import { findUserByUserId } from "../services/userService";
 /**
  * DONE
  * @param socket auth:{ token: accessToken }
  * @param next ExtendedError
  * @returns
  */
-export const socketMiddleware = (
+export const socketMiddleware = async (
   socket: Socket,
   next: (err?: ExtendedError) => void
 ) => {
@@ -23,7 +24,12 @@ export const socketMiddleware = (
       return next(new Error("Unauthorized: payload token không hợp lệ"));
     }
 
-    socket.data.userId = decoded.userId;
+    const user = await findUserByUserId(decoded.userId);
+    if (!user) {
+      return next(new Error("NotFound: Không tìm thấy user"));
+    }
+
+    socket.data.user = user;
 
     next();
   } catch (error) {

@@ -15,11 +15,11 @@ export const useSocketStore = create<socketState>((set, get) => ({
     if (socket) return;
 
     socket = io(import.meta.env.VITE_BACKEND_BASE_URL, {
-      auth: { token: accessToken },
-      reconnection: true,
-      reconnectionAttempts: 5,
-      reconnectionDelay: 1000,
-      transports: ["websocket"],
+      auth: { token: accessToken }, //dữ liệu trong socket.handshake
+      reconnection: true, //bậc chế độ tự kết nối
+      reconnectionAttempts: 5, //cho phép kết nối 5 lần
+      reconnectionDelay: 1000, //thời gian mỗi lần kêt nối chậm 1000ms
+      transports: ["websocket"], //Chỉ sử dụng websocket thuần, tắt fallback
     });
 
     socket.on("connect", () => {
@@ -30,12 +30,19 @@ export const useSocketStore = create<socketState>((set, get) => ({
       console.error("Lỗi kết nối Socket", err.message);
     });
 
+    socket.on("reconnect_failedr", () => {
+      console.error("Kết nối lại Socket quá nhiều");
+    });
+
     socket.on("disconnect", () => {
       console.log("Đã ngắt kết nối Socket");
     });
 
-    socket.on("user-online", (users) => {
-      useUserStore.getState().setOnlineUsers(users);
+    socket.on("user-online", ({ userIds, user }) => {
+      // Nhận user mới
+      useUserStore.getState().addUser(user);
+      // Nhận danh sách userId online
+      useUserStore.getState().setOnlineUserIds(userIds);
     });
 
     socket.on("new-message", ({ message, conversationId }) => {

@@ -28,7 +28,7 @@ export const initSocket = (server: http.Server) => {
   // nghe cổng kết nối
   io.on("connect", async (socket) => {
     console.log("Đã kết nối socket server", socket.id);
-    const userId = socket.data.userId;
+    const userId = socket.data.user._id.toString();
 
     console.log(userId);
     if (!userId) {
@@ -47,7 +47,10 @@ export const initSocket = (server: http.Server) => {
     // Tạm bỏ qua cập nhật isOnline user db
 
     // Phát tin hiệu cho FE
-    io.emit("user-online", Array.from(onlineUsers.keys())); //key[]
+    io.emit("user-online", {
+      userIds: Array.from(onlineUsers.keys()),
+      user: socket.data.user,
+    }); //key[]
 
     // Nhận tin hiệu click tạo conversation, join socketId vào room
     socket.on("join-conversation", async ({ conversationId }) => {
@@ -86,7 +89,10 @@ export const initSocket = (server: http.Server) => {
       // Nếu có xử lý isOnline user db thì cập nhật lại tại trước khi phát tín hiệu
 
       //Phát lại tín hiệu để gửi lại danh sách user online còn lại cho FE
-      io.emit("user-online", Array.from(onlineUsers.keys()));
+      io.emit("user-online", {
+        userIds: Array.from(onlineUsers.keys()),
+        user: null,
+      });
     });
   });
 };
@@ -95,3 +101,5 @@ export const getIO = () => {
   if (!io) throw new Error("Socket.io chưa khởi tạo");
   return io;
 };
+
+export { io };
