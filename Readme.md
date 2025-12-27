@@ -2,7 +2,7 @@
 
 ## 📌 Giới thiệu
 
-Dự án này là một ứng dụng chat realtime sử dụng **Socket.IO** trên nền tảng MERN Stack.Người dùng có thể đăng nhập, xem danh sách người tham gia online/offline, xem tin nhắn cuối, gửi/nhận tin nhắn theo thời gian thực.
+Dự án này là một ứng dụng chat realtime sử dụng **Socket.IO** trên nền tảng MERN Stack. Người dùng có thể đăng nhập, xem danh sách người tham gia online/offline, xem tin nhắn cuối, gửi/nhận tin nhắn theo thời gian thực.
 Mục tiêu: Hiểu và nghiên cứu Socket.IO trong ứng dụng realtime - cấu trúc rõ ràng, tách service, middleware, controller đầy đủ.
 
 ---
@@ -71,23 +71,27 @@ Toàn bộ realtime của dự án hoạt động dựa trên Socket.IO.
 ## 🔄 Quy trình Socket.io xử lý realtime
 
 **1. User Online / Offline realtime**
-BE:
+
+    **Backend**:
 
 - Khi người dùng online, Socket.io lấy thông tin user từ middleware, tạo Socket ID tương ứng mỗi lần kết nối
 - Khởi tạo danh sách người dùng online
 - Kiểm tra user đã tồn tại trong danh sách này hay chưa, nếu chưa thì cho người dùng vào danh sách, lưu toàn bộ Socket ID vào danh sách tương ứng với user này
 - Phát tín hiệu xuống cho Socket FE
-  FE:
+
+  **Frontend**
+
 - Lắng nghe tín hiệu từ Socket BE xử lý hiển thị trạng thái online/offline
 
-**2. Chat realtime theo conversation (Room)"**
-Hiển thị tin nhắn cuối
+**2. Chat realtime theo conversation (Room)**
 
-- Khi người dùng online,Socket BE lấy toàn bộ danh sách Conversation tương ứng mà user đã tham gia, tiến hành tạo room , mỗi cuộc trò chuyện là 1 room(conversationId), cho Socket ID join vào toàn bộ những room này , hay nói cách khác join user này vào toàn bộ cuộc trò chuyện có mặt user trong đó.
+**Hiển thị tin nhắn cuối**
+
+- Khi người dùng online, Socket BE lấy toàn bộ danh sách Conversation tương ứng mà user đã tham gia, tiến hành tạo room , mỗi cuộc trò chuyện là 1 room(conversationId), cho Socket ID join vào toàn bộ những room này , hay nói cách khác join user này vào toàn bộ cuộc trò chuyện có mặt user trong đó.
 - Khi người dùng chat, Socket.io sẽ vào room để phát tín hiệu cho toàn bộ Socket ID ở bên trong(chỉ có những Socket ID bên trong mới có thể lắng nghe)
-- Socket FE lắng nghe tin hiệu(những user có Socket ID nằm trong room), cập nhật tin nhắn cuối và hiển thị cho những người trong conversation thấy(những Socket ID đã join vào room có conversationId tương ứng)
+- Socket FE lắng nghe tin hiệu(những user có Socket ID nằm trong room), cập nhật tin nhắn cuối và hiển thị cho những người trong conversation thấy(những Socket ID đã join vào room có conversationId tương ứng).
 
-Hiển thị tin nhắn cửa sổ chat
+**Hiển thị tin nhắn cửa sổ chat**
 
 - Khi người dùng online,Socket BE lấy toàn bộ danh sách Conversation tương ứng mà user đã tham gia, tiến hành tạo room , mỗi cuộc trò chuyện là 1 room(conversationId), cho Socket ID join vào toàn bộ những room này , hay nói cách khác join user này vào toàn bộ cuộc trò chuyện có mặt user trong đó.
 - Mỗi lần người dụng chọn cuộc trò chuyện để chat, Socket ID của user sẽ được join vào phòng tương ứng. Khi người dùng chat, Socket.io sẽ phát tín hiệu cho room, những Socket ID trong room sẽ nhận được tín hiệu.
@@ -102,7 +106,7 @@ git clone https://github.com/taikhoanchuafile/chat.git
 cd chat
 ```
 
-### **2.Backend setup**
+### **2. Backend setup**
 
 ```bash
 cd backend
@@ -134,7 +138,7 @@ ACCESS_TOKEN_SECRET=<key access tokeb>
 npm run dev
 ```
 
-### **3.Setup frontend**
+### **3. Setup frontend**
 
 ```bash
 cd ../frontend
