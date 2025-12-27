@@ -23,13 +23,17 @@ export const useConversationStore = create<conversationState>((set, get) => ({
     try {
       const { conversation, messages } =
         await useConversationService.createConversation(recipientId);
+
+      // Lưu conversation để hiện tên trên khung chat bên phải
       get().setConversation(conversation);
       const conversationId = conversation._id;
 
+      // Lưu danh sách tin nhắn tương ứng conversation để hiển thị bên trong
       useMessageStore
         .getState()
         .setMessagesByConversationId(conversationId, messages);
 
+      // Join socketid vào phòng conversationId
       useSocketStore
         .getState()
         .socket?.emit("join-conversation", { conversationId });
